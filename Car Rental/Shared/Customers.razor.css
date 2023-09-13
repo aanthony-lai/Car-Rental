@@ -1,0 +1,19 @@
+﻿.customers-container {
+    border: solid 0.5px;
+    width: 50rem;
+}
+
+table {
+    width: 100%;
+}
+
+.status-bar {
+    border: solid 0.5px;
+    border-radius: 20px;
+    width: 75%;
+    background-color: lawngreen;
+}
+
+tr {
+    border-bottom: solid 0.5px;
+}
