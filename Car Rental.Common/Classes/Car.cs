@@ -10,6 +10,7 @@ namespace Car_Rental.Common.Classes
 {
 	public class Car : IVechicle
 	{
+		public int carID { get; set; } = 0;
 		public string regNumber { get; set; }
 		public string brand { get; set; }
 		public int odometer { get; set; }
@@ -26,6 +27,8 @@ namespace Car_Rental.Common.Classes
 			costPerKm = CostPerKm;
 			vechicleType = VechicleType;
 			costPerDay = CostPerDay;
+			// eventuellt lägga in vechileStatus här
+			carID += 1;
 		}	
 	}
 }

@@ -10,20 +10,28 @@
 			<th>$ Day</th>
 			<th>Status</th>
 		</tr>
-		<tr>
-			<td>ABC123</td>
-			<td>Volvo</td>
-			<td>10000</td>
-			<td>1</td>
-			<td>Combi</td>
-			<td>200</td>
-			<td><button class="btn btn-success">Available</button></td>
-		</tr>
+		@foreach (var car in bookingProcessor.GetVechicles())
+		{
+			<tr>
+				<td>@car.regNumber</td>
+				<td>@car.brand</td>
+				<td>@car.odometer</td>
+				<td>@car.costPerKm</td>
+				<td>@car.vechicleType</td>
+				<td>@car.costPerDay</td>
+				<td><button onclick="@(() => rentCarHandler(car))" class="btn btn-success">Available</button></td>
+			</tr>
+		}
 	</table>
 </div>
 
 
 
 @code {
+	[Inject] public BookingProcessor bookingProcessor { get; set; }
 
+	public async Task rentCarHandler(IVechicle vechicle)
+	{
+		await bookingProcessor.createBookings(vechicle);
+	}
 }

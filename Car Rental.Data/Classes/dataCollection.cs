@@ -21,7 +21,7 @@ namespace Car_Rental.Data.Classes
 			seedData();
 		}
 		
-		void seedData()
+		public void seedData()
 		{
 			_customers.Add(new Customer(12345, "Doe", "John"));
 			_customers.Add(new Customer(98765, "Doe", "Jane"));
@@ -30,6 +30,8 @@ namespace Car_Rental.Data.Classes
 			_vechicles.Add(new Car("GHI789", "Tesla", 1000, 3, VechicleTypes.Sedan, 100));
 			_vechicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, VechicleTypes.Van, 300));
 			_vechicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, VechicleTypes.Motorcycle, 50));
+			_bookings.Add(new Booking("ABC987", "John", 10000, DateTime.Today));
+			
 		}
 
 		public IEnumerable<ICustomer> getCustomers()
@@ -39,16 +41,19 @@ namespace Car_Rental.Data.Classes
 		
 		public IEnumerable<IVechicle> getVechicles(VechicleStatuses status = default)
 		{
-			foreach (var car in _vechicles)
-			{
-				car.status = status;
-			}
 			return _vechicles;
 		}
 		
 		public IEnumerable<IBooking> getBookings()
 		{
 			return _bookings;
+		}
+
+		public async Task createBookings(IVechicle vechicle)
+		{
+			await Task.Delay(1000);
+			DateTime today = DateTime.Today;
+			_bookings.Add(new Booking(vechicle.regNumber.ToString(), " ", Convert.ToInt32(vechicle.odometer), today));
 		}
 	}
 }

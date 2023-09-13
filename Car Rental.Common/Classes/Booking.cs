@@ -9,14 +9,14 @@ namespace Car_Rental.Common.Classes
 {
 	public class Booking : IBooking
 	{
-		public Car regNumber { get; set; }
-		public Customer customer { get; set; }
+		public string regNumber { get; set; }
+		public string customer { get; set; }
 		public int kmRented { get; set; }
 		public int kmReturned { get; set; }
 		public DateTime rented { get; set; }
 		public DateTime returned { get; set; }
 		public int cost { get; set; }
-		public Booking(Car RegNumber, Customer Customer, int KmRented, DateTime Rented )
+		public Booking(string RegNumber, string Customer, int KmRented, DateTime Rented)
 		{
 			regNumber = RegNumber;
 			customer = Customer;

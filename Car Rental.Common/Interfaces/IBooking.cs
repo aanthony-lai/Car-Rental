@@ -9,8 +9,8 @@ namespace Car_Rental.Common.Interfaces
 {
 	public interface IBooking
 	{
-		Car regNumber { get; set; }
-		Customer customer { get; set; }
+		string regNumber { get; set; }
+		string customer { get; set; }
 		int kmRented { get; set; }
 		int kmReturned { get; set; }
 		DateTime rented { get; set; }

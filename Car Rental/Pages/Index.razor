@@ -6,20 +6,10 @@
 <Vechicles />
 <Bookings />
 <Customers />
-@foreach (var car in carList)
-{
-	<p>@car.brand</p>
-}
+
+
 
 @code {
-	[Inject] public BookingProcessor? bookingProcessor { get; set; }
-	List<IVechicle> carList = new List<IVechicle>();
-
-
-	protected override void OnInitialized()
-	{
-		carList = bookingProcessor.GetVechicles().ToList();
-	}
-
+	
 
 }

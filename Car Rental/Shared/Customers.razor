@@ -6,14 +6,17 @@
 			<th>Last Name</th>
 			<th>First Name</th>
 		</tr>
-		<tr>
-			<td>12345</td>
-			<td>Doe</td>
-			<td>John</td>
-		</tr>
+		@foreach (var customer in bookingProcessor.GetCustomers())
+		{
+			<tr>
+				<td>@customer.ssn</td>
+				<td>@customer.lastName</td>
+				<td>@customer.firstName</td>
+			</tr>
+		}
 	</table>
 </div>
 
 @code {
-
+	[Inject] public BookingProcessor bookingProcessor { get; set; } 
 }

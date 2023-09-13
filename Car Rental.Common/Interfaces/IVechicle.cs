@@ -14,6 +14,7 @@ namespace Car_Rental.Common.Interfaces
 		string brand { get; set; }
 		int odometer { get; set; }
 		double costPerKm { get; set; }
+		VechicleTypes vechicleType { get; set; }
 		int costPerDay { get; set; }
 		VechicleStatuses status { get; set; }
 	}

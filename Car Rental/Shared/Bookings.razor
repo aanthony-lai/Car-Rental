@@ -11,19 +11,22 @@
 			<th>Cost</th>
 			<th>Status</th>
 		</tr>
-		<tr>
-			<td>GHI789</td>
-			<td>Doe John (12345)</td>
-			<td>1000</td>
-			<td></td>
-			<td>9/9/2023</td>
-			<td></td>
-			<td></td>
-			<td><button class="btn btn-success">Open</button></td>
-		</tr>
+		@foreach (var booking in bookingProcessor.GetBookings())
+		{
+			<tr>
+				<td>@booking.regNumber</td>
+				<td>@booking.customer</td>
+				<td>@booking.kmRented</td>
+				<td>-||-</td>
+				<td>@booking.rented</td>
+				<td>-||-</td>
+				<td></td>
+				<td><button class="btn btn-success">Open</button></td>
+			</tr>
+		}
 	</table>
 </div>
 
 @code {
-
+	[Inject] public BookingProcessor bookingProcessor { get; set; }
 }

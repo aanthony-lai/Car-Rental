@@ -15,10 +15,14 @@ namespace Car_Rental.Business.Classes
 	{
 		private readonly IData _db;
 
-		public BookingProcessor(IData db)
+		public BookingProcessor()
 		{
-			_db = db;
+			_db = new dataCollection();
 		}
+
+
+
+
 
 		public IEnumerable<ICustomer> GetCustomers()
 		{
@@ -30,9 +34,15 @@ namespace Car_Rental.Business.Classes
 			return _db.getVechicles().Where(car => car.status == VechicleStatuses.Available);
 		}
 
+
 		public IEnumerable<IBooking> GetBookings()
 		{
 			return _db.getBookings();
+		}
+
+		public async Task createBookings(IVechicle vechicle)
+		{
+			 await _db.createBookings(vechicle); 
 		}
 	}
 }
