@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.Intrinsics.X86;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,10 +47,11 @@ namespace Car_Rental.Data.Classes
 		{
 			return _bookings;
 		}
+
 		public async Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance)
 		{
 			await Task.Delay(100);
-			IBooking updatedBooking = _bookings.FirstOrDefault(booking => booking.regNumber == vechicle.regNumber);
+			IBooking updatedBooking = _bookings.FirstOrDefault(booking => booking.regNumber == vechicle.regNumber && booking.status == BookingStatuses.Open);
 			updatedBooking.kmReturned = KmReturned;
 			updatedBooking.returned = returned;
 			updatedBooking.cost = (int)cost;

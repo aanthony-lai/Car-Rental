@@ -58,8 +58,6 @@ namespace Car_Rental.Business.Classes
 			double cost = (vechicle.costPerDay * numberOfDaysRented) + (distance * vechicle.costPerKm);
 			int KmReturned = vechicle.odometer + distance;
 			await _db.UpdateBooking(vechicle, returnedWithoutTime, cost, KmReturned, distance);
-			
-			//await _db.UpdateBooking(vechicle, returnedWithoutTime, cost, KmReturned);
 		}
 
 		public async Task createBookings(Booking booking)

@@ -19,10 +19,11 @@
 			<td><input @bind="@odometer" type="number"/></td>
 			<td><input @bind="@costPerKm" type="number"/></td>
 			<td><select onchange="@((ChangeEventArgs e) => vechicleTypeChange(e))">
-					<option>Sedan</option>
-					<option>Combi</option>
-					<option>Van</option>
-					<option>Motorcycle</option>
+				<option></option>	
+				<option>Sedan</option>
+				<option>Combi</option>
+				<option>Van</option>
+				<option>Motorcycle</option>
 			</select></td>
 			<td></td>
 			<td><button onclick="@(() => createCarHandler(regNO, brand, odometer, costPerKm, type))" class="btn btn-outline-success">Add</button></td>
@@ -71,7 +72,6 @@
 </div>
 
 
-
 @code {
 	[Inject] public BookingProcessor bookingProcessor { get; set; }
 	[Parameter] public EventCallback stateChanged { get; set; }
@@ -103,11 +103,11 @@
 			IVechicle newVechicle;
 			if (type == VechicleTypes.Motorcycle)
 			{
-				newVechicle = new Motorcycle(regNumber, brand, odometer, costPerKm, type, pricePerDay);
+				newVechicle = new Motorcycle(regNumber.ToUpper(), brand, odometer, costPerKm, type, pricePerDay);
 			}
 			else
 			{
-				newVechicle = new Car(regNumber, brand, odometer, costPerKm, type, pricePerDay);
+				newVechicle = new Car(regNumber.ToUpper(), brand, odometer, costPerKm, type, pricePerDay);
 			}
 			await bookingProcessor.CreateVechicle(newVechicle);
 			regNO = string.Empty;
