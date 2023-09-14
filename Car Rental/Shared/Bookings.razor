@@ -14,14 +14,14 @@
 		@foreach (var booking in bookingProcessor.GetBookings())
 		{
 			<tr>
-				<td>@booking.regNumber</td>
+				<td><strong>@booking.regNumber</strong></td>
 				<td>@booking.customer</td>
 				<td>@booking.kmRented</td>
-				<td>-||-</td>
+				<td>@booking.kmReturned</td>
 				<td>@booking.rented</td>
-				<td>-||-</td>
-				<td></td>
-				<td><button class="btn btn-success">Open</button></td>
+				<td>@booking.returned</td>
+				<td>@booking.cost</td>
+				<td><button class="@(booking.status == BookingStatuses.Open ? "btn btn-danger" : "btn btn-success")">@booking.status</button></td>
 			</tr>
 		}
 	</table>
@@ -29,4 +29,10 @@
 
 @code {
 	[Inject] public BookingProcessor bookingProcessor { get; set; }
+	[Parameter] public EventCallback stateChanged { get; set; }
+
+	void stateChangedHandler()
+	{
+		StateHasChanged();
+	}
 }

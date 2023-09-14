@@ -1,17 +1,27 @@
-﻿<h3>Customers</h3>
+﻿@inject IJSRuntime js;
+
+<h3>Customers</h3>
 <div class="customers-container">
 	<table>
 		<tr>
 			<th>SSN</th>
 			<th>Last Name</th>
 			<th>First Name</th>
+			<th></th>
+		</tr>
+		<tr>
+			<td><input @bind="ssn" type="number" placeholder="SSN"/></td>
+			<td><input @bind="lastName" type="text" placeholder="Last Name"/></td>
+			<td><input @bind="firstName" type="text" placeholder="First Name"/></td>
+			<td><button onclick="@(() => createCustomerHandler(ssn, lastName, firstName))" class="btn btn-outline-success">Add</button></td>
 		</tr>
 		@foreach (var customer in bookingProcessor.GetCustomers())
 		{
 			<tr>
-				<td>@customer.ssn</td>
+				<td><strong>@customer.ssn</strong></td>
 				<td>@customer.lastName</td>
 				<td>@customer.firstName</td>
+				<td></td>
 			</tr>
 		}
 	</table>
@@ -19,4 +29,23 @@
 
 @code {
 	[Inject] public BookingProcessor bookingProcessor { get; set; } 
+	[Parameter] public EventCallback stateChanged { get; set; }
+	int ssn { get; set; }
+	string lastName { get; set; }
+	string firstName { get; set; }
+
+	async Task createCustomerHandler(int Ssn, string LastName, string FirstName)
+	{
+		bool existingCustomer = bookingProcessor.GetCustomers().Any(customer => customer.ssn == ssn);
+		if(existingCustomer)
+		{
+			await js.InvokeVoidAsync("alert", "This SSN already exists!");
+			return;
+		}
+		else
+		{
+			await bookingProcessor.CreateCustomer(Ssn, lastName, FirstName);
+			await stateChanged.InvokeAsync();
+		}
+	}
 }

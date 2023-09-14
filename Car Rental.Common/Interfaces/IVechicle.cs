@@ -10,6 +10,7 @@ namespace Car_Rental.Common.Interfaces
 {
 	public interface IVechicle
 	{
+		int vechicleID { get; set; }
 		string regNumber { get; set; }
 		string brand { get; set; }
 		int odometer { get; set; }

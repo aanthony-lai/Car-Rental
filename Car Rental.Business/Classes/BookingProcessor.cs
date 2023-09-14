@@ -13,36 +13,58 @@ namespace Car_Rental.Business.Classes
 {
 	public class BookingProcessor
 	{
-		private readonly IData _db;
+		private readonly dataCollection _db;
 
 		public BookingProcessor()
 		{
 			_db = new dataCollection();
 		}
 
-
-
-
+		//BookingProcessor methods__________________________________________________________________
 
 		public IEnumerable<ICustomer> GetCustomers()
 		{
 			return _db.getCustomers();
 		}
 
-		public IEnumerable<IVechicle> GetVechicles(VechicleStatuses status = default)
+		public async Task CreateCustomer(int Ssn, string LastName, string FirstName)
 		{
-			return _db.getVechicles().Where(car => car.status == VechicleStatuses.Available);
+			await _db.CreateCustomer(Ssn, LastName, FirstName);
 		}
 
+		public IEnumerable<IVechicle> GetVechicles(/*VechicleStatuses status = default*/)
+		{
+			return _db.getVechicles();
+		}
+
+		public async Task CreateVechicle(IVechicle newVechicle)
+		{
+			await _db.CreateVechicle(newVechicle);
+		}
 
 		public IEnumerable<IBooking> GetBookings()
 		{
 			return _db.getBookings();
 		}
-
-		public async Task createBookings(IVechicle vechicle)
+		public async Task UpdateBooking(IVechicle vechicle, int distance)
 		{
-			 await _db.createBookings(vechicle); 
+			DateTime returned = DateTime.Now;
+			string returnedWithoutTime = returned.ToString("yyyy-MM-dd");
+			IBooking initialBooking = GetBookings().FirstOrDefault(booking => booking.regNumber == vechicle.regNumber);
+			DateTime.TryParse(returnedWithoutTime, out DateTime returnDate);
+			DateTime.TryParse(initialBooking.rented, out DateTime rented);
+			TimeSpan difference = returnDate - returned;
+			int numberOfDaysRented = (int)difference.TotalDays;
+			double cost = (vechicle.costPerDay * numberOfDaysRented) + (distance * vechicle.costPerKm);
+			int KmReturned = vechicle.odometer + distance;
+			await _db.UpdateBooking(vechicle, returnedWithoutTime, cost, KmReturned, distance);
+			
+			//await _db.UpdateBooking(vechicle, returnedWithoutTime, cost, KmReturned);
+		}
+
+		public async Task createBookings(Booking booking)
+		{
+			await _db.createBookings(booking);
 		}
 	}
 }

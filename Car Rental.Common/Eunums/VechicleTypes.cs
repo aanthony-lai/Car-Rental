@@ -8,9 +8,9 @@ namespace Car_Rental.Common.Eunums
 {
 	public enum VechicleTypes
 	{
-		Combi,
-		Sedan,
-		Van,
-		Motorcycle
+		Combi = 200,
+		Sedan = 100,
+		Van = 300,
+		Motorcycle = 50
 	}
 }
