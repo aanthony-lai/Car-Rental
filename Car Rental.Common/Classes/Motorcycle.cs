@@ -15,8 +15,8 @@ namespace Car_Rental.Common.Classes
 		public string brand { get; set; }
 		public int odometer { get; set; }
 		public double costPerKm { get; set; }
-		public VechicleTypes vechicleType { get; set; }
 		public int costPerDay { get; set; }
+		public VechicleTypes vechicleType { get; set; }
 		public VechicleStatuses status { get; set; }
 		public Motorcycle(string RegNumber, string Brand, int Odometer, double CostPerKm, VechicleTypes VechicleType, int CostPerDay)
 		{

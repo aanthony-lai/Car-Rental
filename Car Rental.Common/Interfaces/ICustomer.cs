@@ -8,6 +8,7 @@ namespace Car_Rental.Common.Interfaces
 {
 	public interface ICustomer
 	{
+		bool isRenting { get; set; }
 		int ssn { get; set; }
 		string lastName { get; set; }
 		string firstName { get; set; }

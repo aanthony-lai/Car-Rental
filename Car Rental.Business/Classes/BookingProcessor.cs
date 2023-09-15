@@ -13,14 +13,12 @@ namespace Car_Rental.Business.Classes
 {
 	public class BookingProcessor
 	{
-		private readonly dataCollection _db;
+		private readonly IData _db;
 
 		public BookingProcessor()
 		{
 			_db = new dataCollection();
 		}
-
-		//BookingProcessor methods__________________________________________________________________
 
 		public IEnumerable<ICustomer> GetCustomers()
 		{
@@ -32,7 +30,7 @@ namespace Car_Rental.Business.Classes
 			await _db.CreateCustomer(Ssn, LastName, FirstName);
 		}
 
-		public IEnumerable<IVechicle> GetVechicles(/*VechicleStatuses status = default*/)
+		public IEnumerable<IVechicle> GetVechicles()
 		{
 			return _db.getVechicles();
 		}
@@ -49,20 +47,23 @@ namespace Car_Rental.Business.Classes
 		public async Task UpdateBooking(IVechicle vechicle, int distance)
 		{
 			DateTime returned = DateTime.Now;
+			IBooking originalBooking = GetBookings().FirstOrDefault(booking => booking.regNumber == vechicle.regNumber);
 			string returnedWithoutTime = returned.ToString("yyyy-MM-dd");
-			IBooking initialBooking = GetBookings().FirstOrDefault(booking => booking.regNumber == vechicle.regNumber);
 			DateTime.TryParse(returnedWithoutTime, out DateTime returnDate);
-			DateTime.TryParse(initialBooking.rented, out DateTime rented);
+			//DateTime.TryParse(originalBooking.rented, out DateTime rented);
 			TimeSpan difference = returnDate - returned;
 			int numberOfDaysRented = (int)difference.TotalDays;
 			double cost = (vechicle.costPerDay * numberOfDaysRented) + (distance * vechicle.costPerKm);
 			int KmReturned = vechicle.odometer + distance;
-			await _db.UpdateBooking(vechicle, returnedWithoutTime, cost, KmReturned, distance);
+			await _db.UpdateBooking(vechicle, returnedWithoutTime, cost, KmReturned, distance, originalBooking);
 		}
 
-		public async Task createBookings(Booking booking)
+		public async Task createBookings(IVechicle vechicle, ICustomer customer)
 		{
-			await _db.createBookings(booking);
+			DateTime today = DateTime.Now;
+			string todayWithoutTime = today.ToString("yyyy-MM-dd");
+			Booking booking = new Booking(vechicle.regNumber, customer, vechicle.odometer, todayWithoutTime);
+			await _db.createBookings(booking, customer);
 		}
 	}
 }

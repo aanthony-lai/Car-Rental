@@ -45,26 +45,19 @@
 							<option></option>
 							@foreach (var customer in bookingProcessor.GetCustomers())
 							{
-								<option value="@customer.firstName">@customer.firstName</option>
+								<option >@customer.ssn</option>
 							}
 						</select>
+						<button onclick="@(() => rentCarHandler(car, customer))" class="btn btn-outline-primary">Rent</button>
 					}
 					else
 					{
 						<input @bind="distance" type="number" placeholder="Distance"/>
-					}
-					@if(car.status == VechicleStatuses.Available)
-					{
-						<button onclick="@(() => rentCarHandler(car))" class="btn btn-outline-primary">Rent</button>
-					}
-					else
-					{
 						<button onclick="@(() => returnCarHandler(car, distance))" class="btn btn-outline-success">Return</button>
 					}
 				</td>
 				<td>
-					<button disabled="true" class="@(car.status == VechicleStatuses.Available ? "btn btn-dark" : "btn btn-danger")"
-					>@car.status</button>
+					<button disabled="true" class="@(car.status == VechicleStatuses.Available ? "btn btn-dark" : "btn btn-danger")">@car.status</button>
 				</td>
 			</tr>
 		}
@@ -73,49 +66,44 @@
 
 
 @code {
-	[Inject] public BookingProcessor bookingProcessor { get; set; }
+	[Inject] public BookingProcessor? bookingProcessor { get; set; }
+	[Inject] public Helpers? helpService { get; set; }
 	[Parameter] public EventCallback stateChanged { get; set; }
-	public bool isRentInProcess { get; set; } = false;
-	public string? customerName { get; set; }
+	
+	ICustomer? customer { get; set; }
+	VechicleTypes type { get; set; }
+	double costPerKm { get; set; }
+	int customerSSN { get; set; }
+	int odometer { get; set; }
+	int pricePerDay { get; set; }
+	int distance { get; set; }
+	string? regNO { get; set; }
+	string? brand { get; set; }
 
-	public string regNO { get; set; }
-	public string brand { get; set; }
-	public int odometer { get; set; } 
-	public double costPerKm { get; set; }
-	public VechicleTypes type { get; set; }
-	public int pricePerDay { get; set; } 
-	public int distance { get; set; }
+	void stateChangedHandler()
+	{
+		StateHasChanged();
+	}
 
-	public async Task createCarHandler(string regNumber, string brand, int odometer, double costPerKm, VechicleTypes type)
+	async Task createCarHandler(string regNumber, string brand, int odometer, double costPerKm, VechicleTypes type)
 	{
 		bool isExistingVechicle = bookingProcessor.GetVechicles().Any(vechicle => vechicle.regNumber == regNumber.ToUpper());
 		if (regNumber.Length != 6)
 		{
 			await js.InvokeVoidAsync("alert", "RegNumbers must contain 6 characters!");
+			return;
 		}
-		else if (isExistingVechicle)
+		else if(isExistingVechicle)
 		{
 			await js.InvokeVoidAsync("alert", "RegNo already exists!");
 			return;
 		}
-		else
-		{
-			IVechicle newVechicle;
-			if (type == VechicleTypes.Motorcycle)
-			{
-				newVechicle = new Motorcycle(regNumber.ToUpper(), brand, odometer, costPerKm, type, pricePerDay);
-			}
-			else
-			{
-				newVechicle = new Car(regNumber.ToUpper(), brand, odometer, costPerKm, type, pricePerDay);
-			}
-			await bookingProcessor.CreateVechicle(newVechicle);
-			regNO = string.Empty;
-			brand = string.Empty;
-			odometer = 0;
-			costPerKm = 0;
-			pricePerDay = 0;
-		}
+		await bookingProcessor.CreateVechicle(helpService.CheckVechicleType(regNumber, brand, odometer, costPerKm, type, pricePerDay));
+		regNO = string.Empty;
+		brand = string.Empty;
+		odometer = 0;
+		costPerKm = 0;
+		pricePerDay = 0;
 	}
 
 	void vechicleTypeChange(ChangeEventArgs e)
@@ -139,7 +127,6 @@
 				pricePerDay = 50;
 				break;
 		}
-
 	}
 
 	async Task returnCarHandler(IVechicle vechicle, int distance)
@@ -149,28 +136,26 @@
 		distance = 0;
 	}
 
-	void stateChangedHandler()
-	{
-		StateHasChanged();
-	}
-
 	void customerChangeHandler(ChangeEventArgs e)
 	{
-		customerName = e.Value?.ToString();
+		customerSSN = Convert.ToInt32(e.Value);
+		customer = bookingProcessor.GetCustomers().FirstOrDefault(customer => customer.ssn == customerSSN);
 	}
-	
-	public async Task rentCarHandler(IVechicle vechicle)
+
+	public async Task rentCarHandler(IVechicle vechicle, ICustomer customer)
 	{
-		if (string.IsNullOrEmpty(customerName))
+		if (customer is null)
 		{
-			await js.InvokeVoidAsync("alert", "Please select a customer");
+			await js.InvokeVoidAsync("alert", "Please select a customer.");
 			return;
 		}
-		DateTime today = DateTime.Now;
-		string todayWithoutTime = today.ToString("yyyy-MM-dd");
-		Booking booking = new Booking(vechicle.regNumber, customerName, vechicle.odometer, todayWithoutTime); 
-		await bookingProcessor.createBookings(booking);
+		if (customer.isRenting)
+		{
+			await js.InvokeVoidAsync("alert", "This customer has an open booking, please return the car first!");
+			return;
+		}
+		await bookingProcessor.createBookings(vechicle, customer);
 		await stateChanged.InvokeAsync();
-		customerName = string.Empty;
+		customer = null;
 	}
 }

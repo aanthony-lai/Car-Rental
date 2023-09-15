@@ -15,7 +15,7 @@
 		{
 			<tr>
 				<td><strong>@booking.regNumber</strong></td>
-				<td>@booking.customer</td>
+				<td>@booking.customer.firstName</td>
 				<td>@booking.kmRented</td>
 				<td>@booking.kmReturned</td>
 				<td>@booking.rented</td>
@@ -28,7 +28,7 @@
 </div>
 
 @code {
-	[Inject] public BookingProcessor bookingProcessor { get; set; }
+	[Inject] public BookingProcessor? bookingProcessor { get; set; }
 	[Parameter] public EventCallback stateChanged { get; set; }
 
 	void stateChangedHandler()

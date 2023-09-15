@@ -12,7 +12,7 @@ namespace Car_Rental.Common.Interfaces
 	{
 		int bookingID { get; set; }
 		string regNumber { get; set; }
-		string customer { get; set; }
+		ICustomer customer { get; set; }
 		int kmRented { get; set; }
 		int kmReturned { get; set; }
 		string rented { get; set; }

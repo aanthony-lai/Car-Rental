@@ -9,14 +9,13 @@
 
 
 @code {
-	[Inject] public BookingProcessor bookingProcessor { get; set; }
+	[Inject] public BookingProcessor? bookingProcessor { get; set; }
 	[Parameter] public EventCallback stateChanged { get; set; }
 
 	void bookingsStateChangedHandler()
 	{
 		stateChanged.InvokeAsync();
 	}
-
 	void vechiclesStateChangedHandler()
 	{
 		stateChanged.InvokeAsync();

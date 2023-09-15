@@ -31,8 +31,8 @@
 	[Inject] public BookingProcessor bookingProcessor { get; set; } 
 	[Parameter] public EventCallback stateChanged { get; set; }
 	int ssn { get; set; }
-	string lastName { get; set; }
-	string firstName { get; set; }
+	string? lastName { get; set; }
+	string? firstName { get; set; }
 
 	async Task createCustomerHandler(int Ssn, string LastName, string FirstName)
 	{

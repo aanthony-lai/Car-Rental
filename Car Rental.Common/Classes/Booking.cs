@@ -12,14 +12,14 @@ namespace Car_Rental.Common.Classes
 	{
 		public int bookingID { get; set; }
 		public string regNumber { get; set; }
-		public string customer { get; set; }
+		public ICustomer customer { get; set; }
 		public int kmRented { get; set; }
 		public int kmReturned { get; set; }
 		public string rented { get; set; }
 		public string returned { get; set; }
 		public int cost { get; set; }
 		public BookingStatuses status { get; set; }
-		public Booking(string RegNumber, string Customer, int KmRented, string Rented)
+		public Booking(string RegNumber, ICustomer Customer, int KmRented, string Rented)
 		{
 			bookingID += 1;
 			regNumber = RegNumber;

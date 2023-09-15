@@ -12,12 +12,12 @@ namespace Car_Rental.Data.Interfaces
 	public interface IData
 	{
 		IEnumerable<ICustomer> getCustomers();
-		IEnumerable<IVechicle> getVechicles(/*VechicleStatuses status = default*/);
+		IEnumerable<IVechicle> getVechicles();
 		IEnumerable<IBooking> getBookings();
-		Task createBookings(Booking booking);
+		Task createBookings(Booking booking, ICustomer customer);
 		Task CreateCustomer(int ssn, string lastName, string firstName);
 		Task CreateVechicle(IVechicle newVechicle);
-		Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance);
+		Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance, IBooking initialBooking);
 		void seedData();
 	}
 }

@@ -15,9 +15,9 @@ namespace Car_Rental.Data.Classes
 {
 	public class dataCollection : IData
 	{
-		public List<ICustomer> _customers = new List<ICustomer>();
-		public List<IVechicle> _vechicles = new List<IVechicle>();
-		public List<IBooking> _bookings = new List<IBooking>();
+		readonly List<ICustomer> _customers = new List<ICustomer>();
+		readonly List<IVechicle> _vechicles = new List<IVechicle>();
+		readonly List<IBooking> _bookings = new List<IBooking>();
 		
 		public dataCollection()
 		{
@@ -34,13 +34,13 @@ namespace Car_Rental.Data.Classes
 			_vechicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, VechicleTypes.Van, 300));
 			_vechicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, VechicleTypes.Motorcycle, 50));
 		}
-		public async Task createBookings(Booking booking)
+		public async Task createBookings(Booking booking, ICustomer customer)
 		{
-			await Task.Delay(2000);
+			await Task.Delay(100);
+			IVechicle? updateVechicleStatus = _vechicles.FirstOrDefault(vechicle => vechicle.regNumber == booking.regNumber);
+			updateVechicleStatus.status = VechicleStatuses.Booked;
+			customer.isRenting = true;
 			_bookings.Add(booking);
-			string regNumber = booking.regNumber;
-			IVechicle? statusToUpdate = _vechicles.FirstOrDefault(vechicle => vechicle.regNumber == regNumber);
-			statusToUpdate.status = VechicleStatuses.Booked;
 		}
 
 		public IEnumerable<IBooking> getBookings()
@@ -48,16 +48,18 @@ namespace Car_Rental.Data.Classes
 			return _bookings;
 		}
 
-		public async Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance)
+		public async Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance, IBooking initialBooking)
 		{
 			await Task.Delay(100);
-			IBooking updatedBooking = _bookings.FirstOrDefault(booking => booking.regNumber == vechicle.regNumber && booking.status == BookingStatuses.Open);
-			updatedBooking.kmReturned = KmReturned;
-			updatedBooking.returned = returned;
-			updatedBooking.cost = (int)cost;
+			IBooking? updateBooking = _bookings.FirstOrDefault(booking => booking.regNumber == vechicle.regNumber && booking.status == BookingStatuses.Open);
+			ICustomer? customer = _customers.FirstOrDefault(customer => customer.ssn == initialBooking.customer.ssn);
+			updateBooking.kmReturned = KmReturned;
+			updateBooking.returned = returned;
+			updateBooking.cost = (int)cost;
+			updateBooking.status = BookingStatuses.Closed;
 			vechicle.odometer = vechicle.odometer + distance;
 			vechicle.status = VechicleStatuses.Available;
-			updatedBooking.status = BookingStatuses.Closed;
+			customer.isRenting = false;
 		}
 
 		public IEnumerable<ICustomer> getCustomers()
@@ -71,7 +73,7 @@ namespace Car_Rental.Data.Classes
 			_customers.Add(new Customer(ssn, lastName, firstName));
 		}
 
-		public IEnumerable<IVechicle> getVechicles(/*VechicleStatuses status = default*/)
+		public IEnumerable<IVechicle> getVechicles()
 		{
 			return _vechicles;
 		}
