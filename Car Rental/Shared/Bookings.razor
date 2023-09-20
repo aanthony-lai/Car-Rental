@@ -11,7 +11,7 @@
 			<th>Cost</th>
 			<th>Status</th>
 		</tr>
-		@foreach (var booking in bookingProcessor.GetBookings())
+		@foreach (var booking in bookingProcessor.GetData<IBooking>())
 		{
 			<tr>
 				<td><strong>@booking.regNumber</strong></td>

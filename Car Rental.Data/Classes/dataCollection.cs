@@ -23,7 +23,6 @@ namespace Car_Rental.Data.Classes
 		{
 			seedData();
 		}
-		
 		public void seedData()
 		{
 			_customers.Add(new Customer(12345, "Doe", "John"));
@@ -34,20 +33,49 @@ namespace Car_Rental.Data.Classes
 			_vechicles.Add(new Car("JKL012", "Jeep", 5000, 1.5, VechicleTypes.Van, 300));
 			_vechicles.Add(new Motorcycle("MNO234", "Yamaha", 30000, 0.5, VechicleTypes.Motorcycle, 50));
 		}
-		public async Task createBookings(Booking booking, ICustomer customer)
+		public IEnumerable<T> GetData<T>()
+		{
+			if (typeof(T) == typeof(ICustomer))
+			{
+				return _customers.Cast<T>();
+			}
+			else if (typeof(T) == typeof(IVechicle))
+			{
+				return _vechicles.Cast<T>();
+			}
+			else if (typeof(T) == typeof(IBooking)) 
+			{
+				return _bookings.Cast<T>();
+			}
+			else
+			{
+				throw new InvalidOperationException("The data type is not supported");
+			}
+		}
+		public async Task PostData<T>(T value)
 		{
 			await Task.Delay(100);
-			IVechicle? updateVechicleStatus = _vechicles.FirstOrDefault(vechicle => vechicle.regNumber == booking.regNumber);
-			updateVechicleStatus.status = VechicleStatuses.Booked;
-			customer.isRenting = true;
-			_bookings.Add(booking);
-		}
 
-		public IEnumerable<IBooking> getBookings()
-		{
-			return _bookings;
+			if (typeof(T) == typeof(ICustomer))
+			{
+				ICustomer newCustomer = (ICustomer)(object)value;
+				_customers.Add(newCustomer);
+			}
+			else if (typeof(T) == typeof(IVechicle))
+			{
+				IVechicle newVechicle = (IVechicle)(object)value;
+				_vechicles.Add(newVechicle);
+			}
+			else if (typeof(T) == typeof(Booking)) 
+			{
+				IBooking newBooking = (IBooking)(Object)value;
+				_bookings.Add(newBooking);
+			}
+			else
+			{
+				throw new InvalidCastException("Tha data type is not supported");
+			}
 		}
-
 		public async Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance, IBooking initialBooking)
 		{
 			await Task.Delay(100);
@@ -61,26 +89,6 @@ namespace Car_Rental.Data.Classes
 			vechicle.status = VechicleStatuses.Available;
 			customer.isRenting = false;
 		}
-
-		public IEnumerable<ICustomer> getCustomers()
-		{
-			return _customers;
-		}
-
-		public async Task CreateCustomer(int ssn, string lastName, string firstName)
-		{
-			await Task.Delay(100);
-			_customers.Add(new Customer(ssn, lastName, firstName));
-		}
-
-		public IEnumerable<IVechicle> getVechicles()
-		{
-			return _vechicles;
-		}
-		public async Task CreateVechicle(IVechicle newVechicle)
-		{
-			await Task.Delay(100);
-			_vechicles.Add(newVechicle);
-		}
+		
 	}
 }

@@ -25,17 +25,5 @@ namespace Car_Rental.Common.Helpers
 			}
 			return newVechicle;
 		}
-		
-		public int customerSSN { get; set; }
-		public ICustomer? customer { get; set; }
-		public string? regNO { get; set; }
-		public string? brand { get; set; }
-		public int odometer { get; set; }
-		public double costPerKm { get; set; }
-		public VechicleTypes type { get; set; }
-		public int pricePerDay { get; set; }
-		public int distance { get; set; }
 	}
-
-
 }

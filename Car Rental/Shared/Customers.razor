@@ -15,7 +15,7 @@
 			<td><input @bind="firstName" type="text" placeholder="First Name"/></td>
 			<td><button onclick="@(() => createCustomerHandler(ssn, lastName, firstName))" class="btn btn-outline-success">Add</button></td>
 		</tr>
-		@foreach (var customer in bookingProcessor.GetCustomers())
+		@foreach (var customer in bookingProcessor.GetData<ICustomer>())
 		{
 			<tr>
 				<td><strong>@customer.ssn</strong></td>
@@ -36,7 +36,7 @@
 
 	async Task createCustomerHandler(int Ssn, string LastName, string FirstName)
 	{
-		bool existingCustomer = bookingProcessor.GetCustomers().Any(customer => customer.ssn == ssn);
+		bool existingCustomer = bookingProcessor.GetData<ICustomer>().Any(customer => customer.ssn == ssn);
 		if(existingCustomer)
 		{
 			await js.InvokeVoidAsync("alert", "This SSN already exists!");

@@ -29,7 +29,7 @@
 			<td><button onclick="@(() => createCarHandler(regNO, brand, odometer, costPerKm, type))" class="btn btn-outline-success">Add</button></td>
 			<td></td>
 		</tr>
-		@foreach (var car in bookingProcessor.GetVechicles().ToList())
+		@foreach (var car in bookingProcessor.GetData<IVechicle>())
 		{
 			<tr>
 				<td><strong>@car.regNumber</strong></td>
@@ -43,9 +43,9 @@
 					{
 						<select @onchange="customerChangeHandler">
 							<option></option>
-							@foreach (var customer in bookingProcessor.GetCustomers())
+							@foreach (var customer in bookingProcessor.GetData<ICustomer>())
 							{
-								<option >@customer.ssn</option>
+								<option>@customer.ssn</option>
 							}
 						</select>
 						<button onclick="@(() => rentCarHandler(car, customer))" class="btn btn-outline-primary">Rent</button>
@@ -69,7 +69,7 @@
 	[Inject] public BookingProcessor? bookingProcessor { get; set; }
 	[Inject] public Helpers? helpService { get; set; }
 	[Parameter] public EventCallback stateChanged { get; set; }
-	
+
 	ICustomer? customer { get; set; }
 	VechicleTypes type { get; set; }
 	double costPerKm { get; set; }
@@ -87,7 +87,7 @@
 
 	async Task createCarHandler(string regNumber, string brand, int odometer, double costPerKm, VechicleTypes type)
 	{
-		bool isExistingVechicle = bookingProcessor.GetVechicles().Any(vechicle => vechicle.regNumber == regNumber.ToUpper());
+		bool isExistingVechicle = bookingProcessor.GetData<IVechicle>().Any(vechicle => vechicle.regNumber == regNumber.ToUpper());
 		if (regNumber.Length != 6)
 		{
 			await js.InvokeVoidAsync("alert", "RegNumbers must contain 6 characters!");
@@ -131,6 +131,7 @@
 
 	async Task returnCarHandler(IVechicle vechicle, int distance)
 	{
+
 		await bookingProcessor.UpdateBooking(vechicle, distance);
 		await stateChanged.InvokeAsync();
 		distance = 0;
@@ -139,7 +140,7 @@
 	void customerChangeHandler(ChangeEventArgs e)
 	{
 		customerSSN = Convert.ToInt32(e.Value);
-		customer = bookingProcessor.GetCustomers().FirstOrDefault(customer => customer.ssn == customerSSN);
+		customer = bookingProcessor.GetData<ICustomer>().FirstOrDefault(customer => customer.ssn == customerSSN);
 	}
 
 	public async Task rentCarHandler(IVechicle vechicle, ICustomer customer)
@@ -152,6 +153,7 @@
 		if (customer.isRenting)
 		{
 			await js.InvokeVoidAsync("alert", "This customer has an open booking, please return the car first!");
+			customer = null;
 			return;
 		}
 		await bookingProcessor.createBookings(vechicle, customer);
