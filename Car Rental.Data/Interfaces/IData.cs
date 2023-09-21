@@ -13,12 +13,5 @@ namespace Car_Rental.Data.Interfaces
 	{
 		IEnumerable<T> GetData<T>();
 		Task PostData<T>(T value);
-		//IEnumerable<IVechicle> getVechicles();
-		//IEnumerable<IBooking> getBookings();
-		//Task createBookings(Booking booking, ICustomer customer);
-		//Task CreateCustomer(int ssn, string lastName, string firstName);
-		//Task CreateVechicle(IVechicle newVechicle);
-		Task UpdateBooking(IVechicle vechicle, string returned, double cost, int KmReturned, int distance, IBooking initialBooking);
-		void seedData();
 	}
 }

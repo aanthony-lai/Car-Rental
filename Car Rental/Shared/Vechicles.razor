@@ -66,7 +66,7 @@
 
 
 @code {
-	[Inject] public BookingProcessor? bookingProcessor { get; set; }
+	[Inject] public BookingProcessor? bookingProcessor { get; set; } = new BookingProcessor();
 	[Inject] public Helpers? helpService { get; set; }
 	[Parameter] public EventCallback stateChanged { get; set; }
 
@@ -132,7 +132,7 @@
 	async Task returnCarHandler(IVechicle vechicle, int distance)
 	{
 
-		await bookingProcessor.UpdateBooking(vechicle, distance);
+		await bookingProcessor.ReturnCar(vechicle, distance);
 		await stateChanged.InvokeAsync();
 		distance = 0;
 	}
@@ -143,7 +143,7 @@
 		customer = bookingProcessor.GetData<ICustomer>().FirstOrDefault(customer => customer.ssn == customerSSN);
 	}
 
-	public async Task rentCarHandler(IVechicle vechicle, ICustomer customer)
+	async Task rentCarHandler(IVechicle vechicle, ICustomer customer)
 	{
 		if (customer is null)
 		{
@@ -156,7 +156,7 @@
 			customer = null;
 			return;
 		}
-		await bookingProcessor.createBookings(vechicle, customer);
+		await bookingProcessor.CreateBookings(vechicle, customer);
 		await stateChanged.InvokeAsync();
 		customer = null;
 	}
