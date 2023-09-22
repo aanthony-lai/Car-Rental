@@ -52,7 +52,7 @@ namespace Car_Rental.Data.Classes
 		}
 		public async Task PostData<T>(T value)
 		{
-			await Task.Delay(100);
+			await Task.Delay(1000);
 
 			if (_data.TryGetValue(typeof(T), out var dataList) && dataList is List<T> typeOfList)
 			{

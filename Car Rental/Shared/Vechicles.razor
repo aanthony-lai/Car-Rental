@@ -26,7 +26,7 @@
 				<option>Motorcycle</option>
 			</select></td>
 			<td></td>
-			<td><button onclick="@(() => createCarHandler(regNO, brand, odometer, costPerKm, type))" class="btn btn-outline-success">Add</button></td>
+			<td><button disabled="@(isRenting ? true : false)" onclick="@(() => createCarHandler(regNO, brand, odometer, costPerKm, type))" class="btn btn-outline-success">Add</button></td>
 			<td></td>
 		</tr>
 		@foreach (var car in bookingProcessor.GetData<IVechicle>())
@@ -48,12 +48,12 @@
 								<option>@customer.ssn</option>
 							}
 						</select>
-						<button onclick="@(() => rentCarHandler(car, customer))" class="btn btn-outline-primary">Rent</button>
+						<button disabled="@(isRenting ? true : false)" @onclick="@(() => rentCarHandler(car, customer))" class="btn btn-outline-primary">Rent</button>
 					}
 					else
 					{
 						<input @bind="distance" type="number" placeholder="Distance"/>
-						<button onclick="@(() => returnCarHandler(car, distance))" class="btn btn-outline-success">Return</button>
+						<button disabled="@(isRenting ? true : false)" @onclick="@(() => returnCarHandler(car, distance))" class="btn btn-outline-success">Return</button>
 					}
 				</td>
 				<td>
@@ -79,6 +79,8 @@
 	int distance { get; set; }
 	string? regNO { get; set; }
 	string? brand { get; set; }
+
+	bool isRenting { get; set; } = false;
 
 	void stateChangedHandler()
 	{
@@ -156,8 +158,11 @@
 			customer = null;
 			return;
 		}
+		isRenting = true;
 		await bookingProcessor.CreateBookings(vechicle, customer);
+		isRenting = false;
 		await stateChanged.InvokeAsync();
 		customer = null;
+		
 	}
 }
