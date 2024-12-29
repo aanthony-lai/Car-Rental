@@ -1,6 +1,6 @@
 ﻿namespace CarRental.Domain.Enums
 {
-    public enum VechicleType
+    public enum VehicleType
     {
         Combi = 200,
         Sedan = 100,

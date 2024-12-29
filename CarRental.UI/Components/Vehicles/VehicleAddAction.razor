@@ -6,7 +6,7 @@
     <td>
         <select @bind="AddVehicleModel.Type">
             <option></option>
-            @foreach (var type in Enum.GetValues(typeof(VechicleType)))
+            @foreach (var type in Enum.GetValues(typeof(VehicleType)))
             {
                 <option value="@type">@type</option>
             }

@@ -1,0 +1,31 @@
+@foreach (var booking in Bookings)
+{
+    <tr>
+        <td><strong>@booking.Vehicle.RegNumber</strong></td>
+        <td>@booking.Customer.FirstName</td>
+        <td>@booking.Vehicle.Odometer</td>
+        <td>@booking.Vehicle.Odometer</td>
+        <td>@booking.RentedOn</td>
+        <td>@booking.ReturnedOn</td>
+        <td>@booking.TotalCost</td>
+        <td>
+            <button 
+                class="@(booking.Status == BookingStatuses.Open ? "btn btn-danger" : "btn btn-success")">
+                @booking.Status
+            </button>
+        </td>
+    </tr>
+    <button
+        class="btn btn-primary"
+        @onclick="() => ResolveBookingEventCallback.InvokeAsync(booking.Id)">
+        Resolve
+    </button>
+}
+
+@code {
+    [Parameter] 
+    public List<Booking> Bookings { get; set; } = [];
+
+    [Parameter] 
+    public EventCallback<int> ResolveBookingEventCallback { get; set; }
+}

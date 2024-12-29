@@ -9,7 +9,7 @@ namespace CarRental.Domain.Entities.VechicleEntity
         decimal Odometer { get; }
         decimal CostPerKm { get; }
         int CostPerDay { get; }
-        VechicleType Type { get; }
-        VechicleStatus Status { get; }
+        VehicleType Type { get; }
+        VehicleStatus Status { get; }
     }
 }

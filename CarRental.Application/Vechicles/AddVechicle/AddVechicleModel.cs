@@ -8,7 +8,7 @@ namespace CarRental.Application.Vechicles
         public string Brand { get; set; } = string.Empty;
         public decimal Odometer { get; set; }
         public decimal CostPerKm { get; set; }
-        public VechicleType Type { get; set; }
-        public VechicleStatus Status { get; set; }
+        public VehicleType Type { get; set; }
+        public VehicleStatus Status { get; set; }
     }
 }

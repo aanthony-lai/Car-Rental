@@ -8,11 +8,11 @@ public class ResolveBookingHandler(
 {
     public async Task Handle(ResolveBookingRequest request, CancellationToken cancellationToken)
     {
-        var booking = bookingRepository.GetByIdAsync(request.ResolveBookingModel.BookingId);
+        var booking = await bookingRepository.GetByIdAsync(request.BookingId);
         
         if (booking is null)
             throw new ArgumentException(
-                $"Booking with id: {request.ResolveBookingModel.BookingId} was not found");
+                $"Booking with id: {request.BookingId} was not found");
         
         
     }

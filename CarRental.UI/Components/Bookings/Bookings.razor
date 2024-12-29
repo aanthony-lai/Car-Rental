@@ -1,5 +1,5 @@
-﻿@using CarRental.Application.Bookings
-@inject IMediator _mediator;
+﻿@using CarRental.Application.Bookings.ResolveBooking
+@inject IMediator Mediator;
 
 <h3>Bookings</h3>
 <div class="bookings-container">
@@ -14,27 +14,22 @@
 			<th>Total cost</th>
 			<th>Status</th>
 		</tr>
-		@foreach (var booking in bookings)
-		{
-			<tr>
-				<td><strong>@booking.Vehicle.RegNumber</strong></td>
-				<td>@booking.Customer.FirstName</td>
-				<td>@booking.Vehicle.Odometer</td>
-				<td>@booking.Vehicle.Odometer</td>
-				<td>@booking.RentedOn</td>
-				<td>@booking.ReturnedOn</td>
-				<td>@booking.TotalCost</td>
-				<td><button class="@(booking.Status == BookingStatuses.Open ? "btn btn-danger" : "btn btn-success")">@booking.Status</button></td>
-			</tr>
-		}
+		<BookingList 
+			Bookings="@_bookings" 
+			ResolveBookingEventCallback="ResolveBookingHandler" />
 	</table>
 </div>
 
 @code {
-	private List<Booking> bookings = new();
+	private List<Booking> _bookings = [];
 
 	protected override async Task OnInitializedAsync()
 	{
-		bookings = await _mediator.Send(new GetBookingsRequest());
+		_bookings = await Mediator.Send(new GetBookingsRequest());
+	}
+
+	private async Task ResolveBookingHandler(int bookingId)
+	{
+		await Mediator.Send(new ResolveBookingRequest(bookingId));
 	}
 }

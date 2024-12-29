@@ -10,13 +10,13 @@ namespace CarRental.Domain.Entities.Vechicle
         public decimal Odometer { get; }
         public decimal CostPerKm { get; }
         public int CostPerDay { get; }
-        public VechicleType Type { get; } 
-        public VechicleStatus Status { get; }
+        public VehicleType Type { get; } 
+        public VehicleStatus Status { get; }
 
         public Car(
             string regNumber, 
             string brand,
-            VechicleType type,
+            VehicleType type,
             decimal odometer = 0, 
             decimal costPerKm = 0)
         {
@@ -35,7 +35,7 @@ namespace CarRental.Domain.Entities.Vechicle
             CostPerKm = costPerKm;
             CostPerDay = (int)type;
             Type = type;
-            Status = VechicleStatus.Available;
+            Status = VehicleStatus.Available;
         }
     }
 }

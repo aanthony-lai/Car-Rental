@@ -7,7 +7,9 @@
 </select>
 <button
 	@onclick="@(() => RentCarEvent.InvokeAsync(Convert.ToInt32(_selectedSocialSecurityNumber)))"
-	disabled="@(RentInProgress || string.IsNullOrWhiteSpace(_selectedSocialSecurityNumber))"
+	disabled="@(RentInProgress || 
+	            string.IsNullOrWhiteSpace(_selectedSocialSecurityNumber) ||
+	            IsRented)"
 	class="btn btn-outline-primary">
 	Rent
 </button>
@@ -18,6 +20,9 @@
 	[Parameter] 
 	public bool RentInProgress { get; set; }
 
+	[Parameter]
+    public bool IsRented { get; set; }
+	
 	[Parameter]
 	public List<Customer> Customers { get; set; } = [];
 

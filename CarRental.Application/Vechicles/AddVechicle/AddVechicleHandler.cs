@@ -16,7 +16,7 @@ namespace CarRental.Application.Vechicles
 
         public async Task<bool> Handle(AddVechicleRequest request, CancellationToken cancellationToken)
         {
-            IVehicle vehicle = request.AddVechicleModel.Type == VechicleType.Motorcycle
+            IVehicle vehicle = request.AddVechicleModel.Type == VehicleType.Motorcycle
                 ? new Motorcycle(
                     request.AddVechicleModel.RegNumber,
                     request.AddVechicleModel.Brand,

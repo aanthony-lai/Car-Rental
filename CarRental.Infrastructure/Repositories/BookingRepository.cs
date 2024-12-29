@@ -20,8 +20,7 @@ namespace CarRental.Application.Repositories
         public async Task<Booking?> GetByIdAsync(int id)
         {
             var bookings = await _dataStore.GetDataAsync<Booking>();
-            return bookings.FirstOrDefault(booking => booking.Id == id) 
-                ?? null;
+            return bookings.SingleOrDefault(booking => booking.Id == id) ?? null;
         }
 
         public async Task SaveAsync(Booking booking)

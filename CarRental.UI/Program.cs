@@ -11,7 +11,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.RegisterMediatrHandlers();
 builder.Services.RegisterInfrastructureServices();
 
-
 //builder.Services.AddSingleton<Helpers>();
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 //builder.Services.AddSingleton<BookingProcessor>();

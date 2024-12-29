@@ -10,8 +10,8 @@ namespace CarRental.Domain.Entities.Vechicle
         public decimal Odometer { get; init; }
         public decimal CostPerKm { get; private set; }
         public int CostPerDay { get; private set; }
-        public VechicleType Type { get; init; }
-        public VechicleStatus Status { get; private set; }
+        public VehicleType Type { get; init; }
+        public VehicleStatus Status { get; private set; }
 
         public Motorcycle(
             string regNumber,
@@ -32,9 +32,9 @@ namespace CarRental.Domain.Entities.Vechicle
             Brand = brand;
             Odometer = odometer;
             CostPerKm = costPerKm;
-            CostPerDay = (int)VechicleType.Motorcycle;
-            Type = VechicleType.Motorcycle;
-            Status = VechicleStatus.Available;
+            CostPerDay = (int)VehicleType.Motorcycle;
+            Type = VehicleType.Motorcycle;
+            Status = VehicleStatus.Available;
         }
     }
 }

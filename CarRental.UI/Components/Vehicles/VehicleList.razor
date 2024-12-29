@@ -8,19 +8,16 @@
 		<td>@vechicle.Type</td>
 		<td>@vechicle.CostPerDay</td>
 		<td>
-			@vechicle.Status == @VechicleStatus.Available
-			? <VechicleBookingAction 
-				  RentInProgress="@RentInProgress" 
-				  Customers="Customers"
-				  RentCarEvent="@((socialSecurityNumber) => RentCarHandler(vechicle.RegNumber, socialSecurityNumber))"/>
-			: <VechicleReturnAction 
-				  RentInProgress="@RentInProgress" 
-				  ReturnCarEventCallback="ReturnCarHandler" />
+			<VehicleBookingAction 
+				RentInProgress="@RentInProgress" 
+				IsRented="@(vechicle.Status == VehicleStatus.Booked)"
+				Customers="Customers"
+				RentCarEvent="@((socialSecurityNumber) => RentCarHandler(vechicle.RegNumber, socialSecurityNumber))"/>
 		</td>
 		<td>
 			<button
 				disabled="true"
-				class="@(vechicle.Status == VechicleStatus.Available ? "btn btn-dark" : "btn btn-danger")">
+				class="@(vechicle.Status == VehicleStatus.Available ? "btn btn-dark" : "btn btn-danger")">
 				@vechicle.Status
 			</button>
 		</td>
@@ -44,10 +41,5 @@
 	private async Task RentCarHandler(string regNumber, int socialSecurityNumber) 
 	{
 		await RentCarEventCallback.InvokeAsync(new AddBookingModel(regNumber, socialSecurityNumber));
-	}
-
-	private async Task ReturnCarHandler()
-	{
-		
 	}
 }
