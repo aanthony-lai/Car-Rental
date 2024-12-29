@@ -1,0 +1,57 @@
+﻿@inject IJSRuntime _jsRuntime;
+@inject IMediator _mediator;
+
+<h3>Customers</h3>
+<div class="customers-container">
+	<table>
+		<tr>
+			<th>SSN</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th></th>
+		</tr>
+		<tr>
+			<td><input @bind="addCustomerModel.SocialSecurityNumber" type="number" placeholder="SSN"/></td>
+			<td><input @bind="addCustomerModel.FirstName" type="text" placeholder="Last Name"/></td>
+			<td><input @bind="addCustomerModel.LastName" type="text" placeholder="First Name"/></td>
+			<td><button onclick="@(() => AddCustomerHandler)" class="btn btn-outline-success">Add</button></td>
+		</tr>
+		@foreach (var customer in customers)
+		{
+			<tr>
+				<td><strong>@customer.SocialSecurityNumber</strong></td>
+				<td>@customer.FirstName</td>
+				<td>@customer.LastName</td>
+				<td></td>
+			</tr>
+		}
+	</table>
+</div>
+
+@code {
+	private AddCustomerModel addCustomerModel = new();
+	private List<Customer> customers = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		customers = await _mediator.Send(new GetCustomersRequest());
+	}
+
+	private async Task AddCustomerHandler()
+	{
+		try 
+		{
+			var isSuccessful = await _mediator.Send(new AddCustomerRequest(addCustomerModel));
+
+			if (!isSuccessful)
+				await _jsRuntime.InvokeVoidAsync("alert", "An error occured, while trying to add the customer");
+
+			addCustomerModel = new();
+			return;
+		}
+		catch(Exception e) 
+		{
+			await _jsRuntime.InvokeVoidAsync("alert", $"{e.Message}");
+		}
+	}
+}

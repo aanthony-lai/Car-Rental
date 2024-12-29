@@ -1,0 +1,40 @@
+﻿@using CarRental.Application.Bookings
+@inject IMediator _mediator;
+
+<h3>Bookings</h3>
+<div class="bookings-container">
+	<table>
+		<tr>
+			<th>RegNo</th>
+			<th>Customer</th>
+			<th>Odometer at Rental</th>
+			<th>Odometer at Returned</th>
+			<th>Rented on</th>
+			<th>Returned on</th>
+			<th>Total cost</th>
+			<th>Status</th>
+		</tr>
+		@foreach (var booking in bookings)
+		{
+			<tr>
+				<td><strong>@booking.Vechicle.RegNumber</strong></td>
+				<td>@booking.Customer.FirstName</td>
+				<td>@booking.Vechicle.Odometer</td>
+				<td>@booking.Vechicle.Odometer</td>
+				<td>@booking.RentedOn</td>
+				<td>@booking.ReturnedOn</td>
+				<td>@booking.TotalCost</td>
+				<td><button class="@(booking.Status == BookingStatuses.Open ? "btn btn-danger" : "btn btn-success")">@booking.Status</button></td>
+			</tr>
+		}
+	</table>
+</div>
+
+@code {
+	private List<Booking> bookings = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		bookings = await _mediator.Send(new GetBookingsRequest());
+	}
+}

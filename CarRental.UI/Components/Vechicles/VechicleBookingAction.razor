@@ -1,0 +1,34 @@
+﻿<select @onchange="CustomerChangeHandler">
+	<option></option>
+	@foreach (var customer in Customers)
+	{
+		<option>@customer.SocialSecurityNumber</option>
+	}
+</select>
+<button disabled="@RentInProgress" @onclick="RentCarHandler" class="btn btn-outline-primary">Rent</button>
+
+@code {
+	[Parameter] 
+	public bool RentInProgress { get; set; }
+
+	[Parameter]
+	public List<Customer> Customers { get; set; } = new();
+
+	[Parameter] 
+	public EventCallback<int> CustomerChangeEvent { get; set; }
+
+	[Parameter] 
+	public EventCallback RentCarEvent { get; set; }
+
+
+	private async Task CustomerChangeHandler(ChangeEventArgs e) 
+	{
+		int customerSocialSecurityNumber = Convert.ToInt32(e.Value);
+		await CustomerChangeEvent.InvokeAsync(customerSocialSecurityNumber);
+	}
+
+	private async Task RentCarHandler() 
+	{
+		await RentCarEvent.InvokeAsync();
+	} 
+}

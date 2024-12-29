@@ -1,0 +1,19 @@
+﻿@page "/"
+<PageTitle>Car rental</PageTitle>
+
+<Vechicles />
+<Bookings />
+<Customers />
+
+@code {
+	[Parameter] public EventCallback stateChanged { get; set; }
+
+	void bookingsStateChangedHandler()
+	{
+		stateChanged.InvokeAsync();
+	}
+	void vechiclesStateChangedHandler()
+	{
+		stateChanged.InvokeAsync();
+	}
+}

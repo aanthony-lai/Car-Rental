@@ -1,0 +1,26 @@
+﻿<input 
+	@bind="distance" 
+	type="number" 
+	placeholder="Distance" >
+</input>
+<button 
+	@onclick="@(() => ReturnCarHandler(distance))" 
+	disabled="@RentInProgress" 
+	class="btn btn-outline-success">
+	Return
+</button>
+
+@code {
+	private decimal distance;
+
+	[Parameter]
+	public bool RentInProgress { get; set; }
+
+	[Parameter]
+	public EventCallback<decimal> ReturnCarEvent { get; set; }
+
+	async Task ReturnCarHandler(decimal distance) 
+	{
+		await ReturnCarEvent.InvokeAsync(distance);
+	} 
+}
