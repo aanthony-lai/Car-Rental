@@ -6,25 +6,21 @@ namespace CarRental.Domain.Entities.Booking
 {
     public class Booking : IEntity
     {
-        public int Id { get; init; }
-        public IVechicle Vechicle { get; private set; }
+        public string VechicleRegNumber { get; } = string.Empty;
+        public IVehicle Vehicle { get; private set; }
+        public int CustomerSSN { get; }
         public Customer Customer { get; private set; }
         public DateTime RentedOn { get; init; }
         public DateTime ReturnedOn { get; private set; }
         public decimal TotalCost { get; private set; }
         public BookingStatuses Status { get; private set; }
 
-        public Booking(IVechicle vechicle, Customer customer)
+        public Booking(IVehicle vehicle, Customer customer)
         {
-            if (vechicle is null)
-                throw new ArgumentException("The selected vechicle is invalid.");
-
-            if (customer is null)
-                throw new ArgumentException($"The selected customer is invalid.");
-
-            Id += 1;
-            Vechicle = vechicle;
-            Customer = customer;
+            VechicleRegNumber = vehicle.RegNumber;
+            Vehicle = vehicle ?? throw new ArgumentException("The selected vechicle is invalid.");
+            CustomerSSN = customer.SocialSecurityNumber;
+            Customer = customer ?? throw new ArgumentException($"The selected customer is invalid.");
             RentedOn = DateTime.Now;
             Status = BookingStatuses.Open;
         }

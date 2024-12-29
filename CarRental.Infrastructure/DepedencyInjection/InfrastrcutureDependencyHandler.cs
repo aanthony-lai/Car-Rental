@@ -12,7 +12,7 @@ namespace CarRental.Infrastructure.DepedencyInjection
         {
             services.AddSingleton<IDataStore, DataStore>();
             services.AddScoped<IBookingRepository, BookingRepository>();
-            services.AddScoped<IVechicleRepository, VechicleRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             return services;

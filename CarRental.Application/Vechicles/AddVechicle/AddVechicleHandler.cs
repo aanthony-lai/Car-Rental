@@ -8,15 +8,15 @@ namespace CarRental.Application.Vechicles
 {
     public sealed class AddVechicleHandler : IRequestHandler<AddVechicleRequest, bool>
     {
-        private readonly IVechicleRepository _vechicleRepository;
-        public AddVechicleHandler(IVechicleRepository vechicleRepository)
+        private readonly IVehicleRepository _vehicleRepository;
+        public AddVechicleHandler(IVehicleRepository vehicleRepository)
         {
-            _vechicleRepository = vechicleRepository;
+            _vehicleRepository = vehicleRepository;
         }
 
         public async Task<bool> Handle(AddVechicleRequest request, CancellationToken cancellationToken)
         {
-            IVechicle vechicle = request.AddVechicleModel.Type == VechicleType.Motorcycle
+            IVehicle vehicle = request.AddVechicleModel.Type == VechicleType.Motorcycle
                 ? new Motorcycle(
                     request.AddVechicleModel.RegNumber,
                     request.AddVechicleModel.Brand,
@@ -29,7 +29,7 @@ namespace CarRental.Application.Vechicles
                     request.AddVechicleModel.Odometer,
                     request.AddVechicleModel.CostPerKm);
 
-            await _vechicleRepository.SaveAsync(vechicle);
+            await _vehicleRepository.SaveAsync(vehicle);
             return true;
         }
     }

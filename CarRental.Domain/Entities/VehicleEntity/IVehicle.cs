@@ -2,7 +2,7 @@
 
 namespace CarRental.Domain.Entities.VechicleEntity
 {
-    public interface IVechicle : IEntity
+    public interface IVehicle : IEntity
     {
         string RegNumber { get; init; }
         string Brand { get; }

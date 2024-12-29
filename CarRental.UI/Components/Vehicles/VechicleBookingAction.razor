@@ -1,0 +1,26 @@
+﻿<select @onchange="@((e) => _selectedSocialSecurityNumber = e.Value.ToString())">
+	<option value="">Select SSN</option>
+	@foreach (var customer in Customers)
+	{
+		<option>@customer.SocialSecurityNumber</option>
+	}
+</select>
+<button
+	@onclick="@(() => RentCarEvent.InvokeAsync(Convert.ToInt32(_selectedSocialSecurityNumber)))"
+	disabled="@(RentInProgress || string.IsNullOrWhiteSpace(_selectedSocialSecurityNumber))"
+	class="btn btn-outline-primary">
+	Rent
+</button>
+
+@code {
+	private string _selectedSocialSecurityNumber;
+	
+	[Parameter] 
+	public bool RentInProgress { get; set; }
+
+	[Parameter]
+	public List<Customer> Customers { get; set; } = [];
+
+	[Parameter] 
+	public EventCallback<int> RentCarEvent { get; set; }
+}

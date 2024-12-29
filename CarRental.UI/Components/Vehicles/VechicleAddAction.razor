@@ -1,0 +1,41 @@
+<tr>
+    <td><input @bind="@AddVehicleModel.RegNumber" type="text" placeholder="RegNo" /></td>
+    <td><input @bind="@AddVehicleModel.Brand" type="text" placeholder="Brand" /></td>
+    <td><input @bind="@AddVehicleModel.Odometer" type="number"/></td>
+    <td><input @bind="@AddVehicleModel.CostPerKm" type="number"/></td>
+    <td>
+        <select @bind="AddVehicleModel.Type">
+            <option></option>
+            @foreach (var type in Enum.GetValues(typeof(VechicleType)))
+            {
+                <option value="@type">@type</option>
+            }
+        </select>
+    </td>
+    <td></td>
+    <td>
+        <button
+            disabled="@RentInProgress"
+            onclick="@AddVehicleHandler"
+            class="btn btn-outline-success">
+            Add
+        </button>
+    </td>
+    <td></td>
+</tr>
+
+@code {
+    [Parameter] 
+    public AddVechicleModel AddVehicleModel { get; set; } = new();
+    
+    [Parameter]
+    public bool RentInProgress { get; set; }
+
+    [Parameter]
+    public EventCallback AddVehicleEventCallback { get; set; }
+    
+    private async Task AddVehicleHandler()
+    {
+        await AddVehicleEventCallback.InvokeAsync();
+    }
+}

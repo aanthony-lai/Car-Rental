@@ -1,0 +1,53 @@
+﻿@foreach (var vechicle in Vechicles)
+{
+	<tr>
+		<td><strong>@vechicle.RegNumber</strong></td>
+		<td>@vechicle.Brand</td>
+		<td>@vechicle.Odometer</td>
+		<td>@vechicle.CostPerKm</td>
+		<td>@vechicle.Type</td>
+		<td>@vechicle.CostPerDay</td>
+		<td>
+			@vechicle.Status == @VechicleStatus.Available
+			? <VechicleBookingAction 
+				  RentInProgress="@RentInProgress" 
+				  Customers="Customers"
+				  RentCarEvent="@((socialSecurityNumber) => RentCarHandler(vechicle.RegNumber, socialSecurityNumber))"/>
+			: <VechicleReturnAction 
+				  RentInProgress="@RentInProgress" 
+				  ReturnCarEventCallback="ReturnCarHandler" />
+		</td>
+		<td>
+			<button
+				disabled="true"
+				class="@(vechicle.Status == VechicleStatus.Available ? "btn btn-dark" : "btn btn-danger")">
+				@vechicle.Status
+			</button>
+		</td>
+	</tr>
+}
+
+@code {
+	[Parameter] 
+    public List<IVehicle> Vechicles { get; set; } = [];
+
+	[Parameter]
+	public List<Customer> Customers { get; set; } = [];
+
+	[Parameter]
+	public bool RentInProgress { get; set; }
+
+	[Parameter]
+	public EventCallback<AddBookingModel> RentCarEventCallback { get; set; }
+	
+
+	private async Task RentCarHandler(string regNumber, int socialSecurityNumber) 
+	{
+		await RentCarEventCallback.InvokeAsync(new AddBookingModel(regNumber, socialSecurityNumber));
+	}
+
+	private async Task ReturnCarHandler()
+	{
+		
+	}
+}
