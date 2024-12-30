@@ -8,7 +8,7 @@ namespace CarRental.Domain.Entities.Booking
     {
         public int Id { get; }
         public string RegNumber { get; } = string.Empty;
-        public IVehicle Vehicle { get; private set; }
+        public IVehicle Vehicle { get; }
         public int SocialSecurityNumber { get; }
         public Customer Customer { get; private set; }
         public DateTime RentedOn { get; }
@@ -27,10 +27,13 @@ namespace CarRental.Domain.Entities.Booking
             Status = BookingStatuses.Open;
         }
 
-        public void Resolve(decimal distance)
+        public void Resolve(decimal totalDistance)
         {
+            if (totalDistance < 0)
+                throw new ArgumentException("The total distance cannot be negative.");
+            
             ReturnedOn = DateTime.Now;
-            TotalCost = Vehicle.CostPerDay * (ReturnedOn.Day - RentedOn.Day + 1) + distance * Vehicle.CostPerKm;
+            TotalCost = Vehicle.CostPerDay * (ReturnedOn.Day - RentedOn.Day + 1) + totalDistance * Vehicle.CostPerKm;
             Status = BookingStatuses.Closed;
         }
     }

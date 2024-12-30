@@ -6,11 +6,11 @@ namespace CarRental.Domain.Entities.Vechicle
     public class Motorcycle : IVehicle
     {
         public string RegNumber { get; init; } = string.Empty;
-        public string Brand { get; init; } = string.Empty;
-        public decimal Odometer { get; init; }
-        public decimal CostPerKm { get; private set; }
-        public int CostPerDay { get; private set; }
-        public VehicleType Type { get; init; }
+        public string Brand { get; } = string.Empty;
+        public decimal Odometer { get; private set; }
+        public decimal CostPerKm { get; }
+        public int CostPerDay { get; }
+        public VehicleType Type { get; }
         public VehicleStatus Status { get; private set; }
 
         public Motorcycle(
@@ -35,6 +35,19 @@ namespace CarRental.Domain.Entities.Vechicle
             CostPerDay = (int)VehicleType.Motorcycle;
             Type = VehicleType.Motorcycle;
             Status = VehicleStatus.Available;
+        }
+        
+        public void MakeAvailable()
+        {
+            Status = VehicleStatus.Available;
+        }
+
+        public void UpdateOdometer(decimal distance)
+        {
+            if (distance < 0)
+                throw new ArgumentException("Distance can't be negative."); 
+            
+            Odometer += distance;
         }
     }
 }

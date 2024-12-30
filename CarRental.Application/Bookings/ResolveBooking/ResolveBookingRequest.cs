@@ -4,9 +4,9 @@ namespace CarRental.Application.Bookings.ResolveBooking;
 
 public class ResolveBookingRequest: IRequest
 {
-    public int BookingId { get; }
-    public ResolveBookingRequest(int bookingId)
+    public ResolveBookingModel ResolveBookingModel { get; }
+    public ResolveBookingRequest(ResolveBookingModel resolveBookingModel)
     {
-        BookingId = bookingId;
+        ResolveBookingModel = resolveBookingModel;
     }
 }

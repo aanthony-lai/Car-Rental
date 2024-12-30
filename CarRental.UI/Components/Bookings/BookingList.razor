@@ -15,17 +15,22 @@
             </button>
         </td>
     </tr>
+    <input
+        @bind="@_totalDistance"
+        type="number"/>
     <button
         class="btn btn-primary"
-        @onclick="() => ResolveBookingEventCallback.InvokeAsync(booking.Id)">
+        @onclick="() => ResolveBookingEventCallback.InvokeAsync(new ResolveBookingModel(booking.Id, _totalDistance))">
         Resolve
     </button>
 }
 
 @code {
+    private decimal _totalDistance;
+    
     [Parameter] 
     public List<Booking> Bookings { get; set; } = [];
 
     [Parameter] 
-    public EventCallback<int> ResolveBookingEventCallback { get; set; }
+    public EventCallback<ResolveBookingModel> ResolveBookingEventCallback { get; set; }
 }

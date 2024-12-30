@@ -7,11 +7,11 @@ namespace CarRental.Domain.Entities.Vechicle
     {
         public string RegNumber { get; init; } = string.Empty;
         public string Brand { get; } = string.Empty;
-        public decimal Odometer { get; }
+        public decimal Odometer { get; private set; }
         public decimal CostPerKm { get; }
         public int CostPerDay { get; }
         public VehicleType Type { get; } 
-        public VehicleStatus Status { get; }
+        public VehicleStatus Status { get; private set; }
 
         public Car(
             string regNumber, 
@@ -36,6 +36,19 @@ namespace CarRental.Domain.Entities.Vechicle
             CostPerDay = (int)type;
             Type = type;
             Status = VehicleStatus.Available;
+        }
+        
+        public void MakeAvailable()
+        {
+            Status = VehicleStatus.Available;
+        }
+
+        public void UpdateOdometer(decimal distance)
+        {
+            if (distance < 0)
+                throw new ArgumentException("Distance can't be negative.");
+            
+            Odometer += distance;
         }
     }
 }

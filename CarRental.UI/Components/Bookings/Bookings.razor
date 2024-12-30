@@ -1,5 +1,4 @@
-﻿@using CarRental.Application.Bookings.ResolveBooking
-@inject IMediator Mediator;
+﻿@inject IMediator Mediator;
 
 <h3>Bookings</h3>
 <div class="bookings-container">
@@ -28,8 +27,8 @@
 		_bookings = await Mediator.Send(new GetBookingsRequest());
 	}
 
-	private async Task ResolveBookingHandler(int bookingId)
+	private async Task ResolveBookingHandler(ResolveBookingModel resolveBookingModel)
 	{
-		await Mediator.Send(new ResolveBookingRequest(bookingId));
+		await Mediator.Send(new ResolveBookingRequest(resolveBookingModel));
 	}
 }

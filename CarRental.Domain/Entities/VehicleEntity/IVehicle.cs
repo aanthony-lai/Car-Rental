@@ -11,5 +11,7 @@ namespace CarRental.Domain.Entities.VechicleEntity
         int CostPerDay { get; }
         VehicleType Type { get; }
         VehicleStatus Status { get; }
+        void MakeAvailable();
+        void UpdateOdometer(decimal distance);
     }
 }

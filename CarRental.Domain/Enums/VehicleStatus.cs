@@ -8,7 +8,7 @@ namespace CarRental.Domain.Enums
 {
 	public enum VehicleStatus
 	{
-		Available = default,
+		Available,
 		Booked
 	}
 }
