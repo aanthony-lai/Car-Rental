@@ -41,13 +41,8 @@
 	{
 		try 
 		{
-			var isSuccessful = await _mediator.Send(new AddCustomerRequest(addCustomerModel));
-
-			if (!isSuccessful)
-				await _jsRuntime.InvokeVoidAsync("alert", "An error occured, while trying to add the customer");
-
+			await _mediator.Send(new AddCustomerRequest(addCustomerModel));
 			addCustomerModel = new();
-			return;
 		}
 		catch(Exception e) 
 		{

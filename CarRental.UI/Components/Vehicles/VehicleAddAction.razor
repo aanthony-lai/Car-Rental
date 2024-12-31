@@ -16,7 +16,7 @@
     <td>
         <button
             disabled="@RentInProgress"
-            onclick="@AddVehicleHandler"
+            @onclick="@AddVehicleHandler"
             class="btn btn-outline-success">
             Add
         </button>
@@ -26,7 +26,7 @@
 
 @code {
     [Parameter] 
-    public AddVechicleModel AddVehicleModel { get; set; } = new();
+    public AddVehicleModel AddVehicleModel { get; set; } = new();
     
     [Parameter]
     public bool RentInProgress { get; set; }

@@ -1,0 +1,67 @@
+﻿@inject IJSRuntime JsRuntime;
+@inject IMediator Mediator;
+@inject VehicleStateContainer VehicleStateContainer;
+
+<h3>Vechicles</h3>
+<div class="vechicle-container">
+	<table>
+		<tr>
+			<th>RegNo</th>
+			<th>Brand</th>
+			<th>Odometer</th>
+			<th>Cost/Km</th>
+			<th>Vechicle Type</th>
+			<th>Daily cost</th>
+			<td>Action</td>
+			<th>Status</th>
+		</tr>
+		<VehicleAddAction 
+			AddVehicleModel="@_addVehicleModel"
+			RentInProgress="@_rentInProgress"
+			AddVehicleEventCallback="AddVechicleHandler" >
+		</VehicleAddAction>
+		<VehicleList 
+			Vechicles="@Vehicles"
+			Customers="@Customers"
+			RentInProgress="@_rentInProgress" 
+			RentCarEventCallback="@((addBookingModel) => RentCarHandler(addBookingModel))">
+		</VehicleList>
+	</table>
+</div>
+
+
+@code {
+	[Parameter] public List<Vehicle> Vehicles { get; set; } = [];
+	[Parameter] public List<Customer> Customers { get; set; } = [];
+	[CascadingParameter] public Func<Task>? RefreshData { get; set; }
+
+	private AddVehicleModel _addVehicleModel = new();
+	private bool _rentInProgress = false;
+
+	private async Task AddVechicleHandler() 
+	{
+		try 
+		{
+			await Mediator.Send(new AddVehicleRequest(_addVehicleModel));
+			_addVehicleModel = new AddVehicleModel();
+
+			await VehicleStateContainer.NotifyStateChanged();
+		}
+		catch (Exception ex) 
+		{
+			await JsRuntime.InvokeVoidAsync("alert", $"{ex.Message}");
+		}
+	}
+
+	private async Task RentCarHandler(AddBookingModel addBookingModel)
+	{
+		try
+		{
+			await Mediator.Send(new AddBookingRequest(addBookingModel));
+		}
+		catch (Exception ex)
+		{
+			await JsRuntime.InvokeVoidAsync("alert", $"{ex.Message}");
+		}
+	}
+}

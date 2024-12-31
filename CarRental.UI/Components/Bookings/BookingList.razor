@@ -20,7 +20,7 @@
         type="number"/>
     <button
         class="btn btn-primary"
-        @onclick="() => ResolveBookingEventCallback.InvokeAsync(new ResolveBookingModel(booking.Id, _totalDistance))">
+        @onclick="() => CompleteBookingEventCallback.InvokeAsync(new CompleteBookingModel(booking.Id, _totalDistance))">
         Resolve
     </button>
 }
@@ -32,5 +32,5 @@
     public List<Booking> Bookings { get; set; } = [];
 
     [Parameter] 
-    public EventCallback<ResolveBookingModel> ResolveBookingEventCallback { get; set; }
+    public EventCallback<CompleteBookingModel> CompleteBookingEventCallback { get; set; }
 }

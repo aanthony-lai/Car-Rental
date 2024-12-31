@@ -1,8 +1,8 @@
 ﻿using CarRental.Domain.Enums;
 
-namespace CarRental.Application.Vechicles
+namespace CarRental.Application.Vehicles
 {
-    public sealed class AddVechicleModel
+    public sealed class AddVehicleModel
     {
         public string RegNumber { get; set; } = string.Empty;
         public string Brand { get; set; } = string.Empty;

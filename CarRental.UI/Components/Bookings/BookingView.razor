@@ -1,0 +1,29 @@
+﻿@inject IMediator Mediator;
+
+<h3>Bookings</h3>
+<div class="bookings-container">
+	<table>
+		<tr>
+			<th>RegNo</th>
+			<th>Customer</th>
+			<th>Odometer at Rental</th>
+			<th>Odometer at Returned</th>
+			<th>Rented on</th>
+			<th>Returned on</th>
+			<th>Total cost</th>
+			<th>Status</th>
+		</tr>
+		<BookingList 
+		Bookings="@Bookings" 
+		CompleteBookingEventCallback="CompleteBookingHandler" />
+	</table>
+</div>
+
+@code {
+	[Parameter] public List<Booking> Bookings { get; set; } = [];
+
+	private async Task CompleteBookingHandler(CompleteBookingModel completeBookingModel)
+	{
+		await Mediator.Send(new CompleteBookingRequest(completeBookingModel));
+	}
+}

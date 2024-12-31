@@ -1,11 +1,11 @@
-﻿using CarRental.Domain.Entities.VechicleEntity;
+﻿using CarRental.Domain.Entities.VehicleEntity;
 
 namespace CarRental.Domain.Repositories
 {
     public interface IVehicleRepository
     {
-        Task<IEnumerable<IVehicle>> GetAsync();
-        Task<IVehicle?> GetByRegNumberAsync(string regNumber);
-        Task SaveAsync(IVehicle type);
+        Task<IEnumerable<Vehicle>> GetAsync();
+        Task<Vehicle?> GetByRegNumberAsync(string regNumber);
+        Task SaveAsync(Vehicle type);
     }
 }

@@ -1,61 +1,69 @@
-﻿using CarRental.Application.Interfaces;
-using CarRental.Domain.Entities;
+﻿using CarRental.Domain.Base;
+using CarRental.Domain.Entities.Booking;
+using CarRental.Domain.Entities.Customers;
+using CarRental.Domain.Entities.VehicleEntity;
+using CarRental.Domain.Enums;
+using CarRental.Infrastructure.Data;
 
 namespace CarRental.Application.Data
 {
     public sealed class DataStore : IDataStore
     {
-        private readonly Dictionary<Type, ICollection<IEntity>> _data = new Dictionary<Type, ICollection<IEntity>>();
+        private readonly Dictionary<Type, object> _data = new Dictionary<Type, object>();
 
         public DataStore()
         {
             SeedData();
         }
 
-        public async Task<IEnumerable<IEntity>> GetDataAsync<IEntity>()
+        public async Task<List<T>> GetDataAsync<T>() where T : Entity
         {
             await Task.Delay(100);
 
-            if (_data.TryGetValue(typeof(IEntity), out var dataCollection) &&
-                dataCollection is IEnumerable<IEntity> selectedCollection)
+            if (_data.TryGetValue(typeof(T), out var dataCollection) 
+                && dataCollection is List<T> selectedCollection)
             {
                 return selectedCollection;
             }
-
+            
             throw new InvalidOperationException("No data was found.");
         }
 
-        public async Task SaveDataAsync<IEntity>(IEntity entity)
+        public async Task SaveDataAsync<T>(T entity) where T : Entity
         {
             await Task.Delay(1000);
 
-            if (_data.TryGetValue(typeof(IEntity), out var dataCollection) &&
-                dataCollection is ICollection<IEntity> selectedCollection)
+            if (_data.TryGetValue(typeof(T), out var dataCollection) 
+                && dataCollection is List<T> selectedCollection)
             {
                 selectedCollection.Add(entity);
             }
-
-            throw new InvalidOperationException("Data type is not supported.");
+            else
+            {
+                throw new InvalidOperationException("Data type is not supported.");
+            }
         }
 
         private void SeedData()
         {
-            //_data[typeof(Booking)] = new List<IEntity>();
+            _data[typeof(Booking)] = new List<Booking>();
 
-            //_data[typeof(Customer)] = new List<IEntity>()
-            //{
-            //    new Customer(12345, "Doe", "John"),
-            //    new Customer(98765, "Doe", "Jane")
-            //};
+            _data[typeof(Customer)] = new List<Customer>()
+            {
+                new Customer("John", "Doe", 123456),
+                new Customer("Jane", "Doe", 567891)
+            };
 
-            //_data[typeof(IVechicle)] = new List<IEntity>()
-            //{
-            //    new Car("ABC123", "Volvo", 10000, 1, VechicleType.Combi, 200),
-            //    new Car("DEF456", "Saab", 20000, 1, VechicleType.Sedan, 100),
-            //    new Car("GHI789", "Tesla", 1000, 3, VechicleType.Sedan, 100),
-            //    new Car("JKL012", "Jeep", 5000, 1.5, VechicleType.Van, 300),
-            //    new Motorcycle("MNO234", "Yamaha", 30000, 0.5, VechicleType.Motorcycle, 50)
-            //};
+            _data[typeof(Vehicle)] = new List<Vehicle>()
+            {
+                new Car("ABC123", "Volvo", VehicleType.Combi, 1000, 30),
+                new Car("DEF456", "Saab", VehicleType.Sedan, 4500, 25),
+                new Car("GHI789", "Tesla", VehicleType.Sedan, 500, 45),
+                new Car("JKL012", "Ford", VehicleType.Truck, 7500, 40),
+                new Car("MNO234", "Chevrolet", VehicleType.SUV, 3200, 28),
+                new Motorcycle("PQR567", "Yamaha", 12000, 15),
+                new Motorcycle("STU890", "Honda", 9000, 18)
+            };
         }
     }
 }

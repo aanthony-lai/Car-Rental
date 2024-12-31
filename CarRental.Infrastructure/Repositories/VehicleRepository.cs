@@ -1,6 +1,6 @@
 ﻿using CarRental.Domain.Repositories;
-using CarRental.Application.Interfaces;
-using CarRental.Domain.Entities.VechicleEntity;
+using CarRental.Domain.Entities.VehicleEntity;
+using CarRental.Infrastructure.Data;
 
 namespace CarRental.Application.Repositories
 {
@@ -12,19 +12,19 @@ namespace CarRental.Application.Repositories
             _dataStore = dataStore;
         }
 
-        public async Task<IEnumerable<IVehicle>> GetAsync()
+        public async Task<IEnumerable<Vehicle>> GetAsync()
         {
-            return await _dataStore.GetDataAsync<IVehicle>();
+            return await _dataStore.GetDataAsync<Vehicle>();
         }
 
-        public async Task<IVehicle?> GetByRegNumberAsync(string regNumber)
+        public async Task<Vehicle?> GetByRegNumberAsync(string regNumber)
         {
-            var vehicles = await _dataStore.GetDataAsync<IVehicle>();
+            var vehicles = await _dataStore.GetDataAsync<Vehicle>();
             return vehicles.FirstOrDefault(vehicle => vehicle.RegNumber == regNumber) 
                    ?? null;
         }
 
-        public async Task SaveAsync(IVehicle vehicle)
+        public async Task SaveAsync(Vehicle vehicle)
         {
             await _dataStore.SaveDataAsync(vehicle);
         }

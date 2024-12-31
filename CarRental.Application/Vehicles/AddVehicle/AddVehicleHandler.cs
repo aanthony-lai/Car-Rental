@@ -1,22 +1,27 @@
-﻿using CarRental.Domain.Entities.Vechicle;
-using CarRental.Domain.Entities.VechicleEntity;
+﻿using CarRental.Domain.Entities.VehicleEntity;
 using CarRental.Domain.Enums;
 using CarRental.Domain.Repositories;
 using MediatR;
 
-namespace CarRental.Application.Vechicles
+namespace CarRental.Application.Vehicles
 {
-    public sealed class AddVechicleHandler : IRequestHandler<AddVechicleRequest, bool>
+    public sealed class AddVehicleHandler : IRequestHandler<AddVehicleRequest, bool>
     {
         private readonly IVehicleRepository _vehicleRepository;
-        public AddVechicleHandler(IVehicleRepository vehicleRepository)
+        public AddVehicleHandler(IVehicleRepository vehicleRepository)
         {
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<bool> Handle(AddVechicleRequest request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AddVehicleRequest request, CancellationToken cancellationToken)
         {
-            IVehicle vehicle = request.AddVechicleModel.Type == VehicleType.Motorcycle
+            var existingVehicle = await _vehicleRepository
+                .GetByRegNumberAsync(request.AddVechicleModel.RegNumber);
+
+            if (existingVehicle != null)
+                throw new ArgumentException($"Reg number: {existingVehicle.RegNumber} is already in use.");
+
+            Vehicle vehicle = request.AddVechicleModel.Type == VehicleType.Motorcycle
                 ? new Motorcycle(
                     request.AddVechicleModel.RegNumber,
                     request.AddVechicleModel.Brand,

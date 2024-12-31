@@ -1,10 +1,13 @@
-﻿namespace CarRental.Domain.Entities.Customers
+﻿using CarRental.Domain.Base;
+
+namespace CarRental.Domain.Entities.Customers
 {
-    public class Customer : IEntity
+    public class Customer : Entity
     {
         public int SocialSecurityNumber { get; init; }
         public string FirstName { get; }
         public string LastName { get; }
+        public bool IsRenting { get; private set; }
 
         public Customer(string firstName, string lastName, int socialSecurityNumber)
         {
@@ -23,6 +26,7 @@
             FirstName = firstName;
             LastName = lastName;
             SocialSecurityNumber = socialSecurityNumber;
+            IsRenting = false;
         }
     }
 }

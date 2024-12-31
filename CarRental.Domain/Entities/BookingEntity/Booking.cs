@@ -1,14 +1,16 @@
-﻿using CarRental.Domain.Entities.Customers;
-using CarRental.Domain.Entities.VechicleEntity;
+﻿using CarRental.Domain.Base;
+using CarRental.Domain.Entities.BookingEntity;
+using CarRental.Domain.Entities.Customers;
+using CarRental.Domain.Entities.VehicleEntity;
 using CarRental.Domain.Enums;
 
 namespace CarRental.Domain.Entities.Booking
 {
-    public class Booking : IEntity
+    public class Booking: Entity
     {
         public int Id { get; }
         public string RegNumber { get; } = string.Empty;
-        public IVehicle Vehicle { get; }
+        public VehicleEntity.Vehicle Vehicle { get; }
         public int SocialSecurityNumber { get; }
         public Customer Customer { get; private set; }
         public DateTime RentedOn { get; }
@@ -16,7 +18,7 @@ namespace CarRental.Domain.Entities.Booking
         public decimal TotalCost { get; private set; }
         public BookingStatuses Status { get; private set; }
 
-        public Booking(IVehicle vehicle, Customer customer)
+        public Booking(VehicleEntity.Vehicle vehicle, Customer customer)
         {
             Id += 1;
             RegNumber = vehicle.RegNumber;
@@ -27,7 +29,7 @@ namespace CarRental.Domain.Entities.Booking
             Status = BookingStatuses.Open;
         }
 
-        public void Resolve(decimal totalDistance)
+        public void Complete(decimal totalDistance)
         {
             if (totalDistance < 0)
                 throw new ArgumentException("The total distance cannot be negative.");
@@ -35,6 +37,8 @@ namespace CarRental.Domain.Entities.Booking
             ReturnedOn = DateTime.Now;
             TotalCost = Vehicle.CostPerDay * (ReturnedOn.Day - RentedOn.Day + 1) + totalDistance * Vehicle.CostPerKm;
             Status = BookingStatuses.Closed;
+
+            base.AddDomainEvent(new BookingCompletedDomainEvent(this.RegNumber, totalDistance));
         }
     }
 }

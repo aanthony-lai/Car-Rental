@@ -1,7 +1,7 @@
 ﻿using CarRental.Application.Data;
-using CarRental.Application.Interfaces;
 using CarRental.Application.Repositories;
 using CarRental.Domain.Repositories;
+using CarRental.Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CarRental.Infrastructure.DepedencyInjection

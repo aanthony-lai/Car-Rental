@@ -1,13 +1,14 @@
 using CarRental.Domain.Repositories;
 using MediatR;
 
-namespace CarRental.Application.Bookings.ResolveBooking;
+namespace CarRental.Application.Bookings.CompleteBooking;
 
-public class ResolveBookingHandler(
+public class CompleteBookingHandler(
     IBookingRepository bookingRepository,
-    IVehicleRepository vehicleRepository): IRequestHandler<ResolveBookingRequest>
+    IVehicleRepository vehicleRepository,
+    IMediator mediator): IRequestHandler<CompleteBookingRequest>
 {
-    public async Task Handle(ResolveBookingRequest request, CancellationToken cancellationToken)
+    public async Task Handle(CompleteBookingRequest request, CancellationToken cancellationToken)
     {
         var booking = await bookingRepository.GetByIdAsync(request.ResolveBookingModel.BookingId);
         
@@ -20,9 +21,14 @@ public class ResolveBookingHandler(
         if (vehicle is null)
             throw new ArgumentException($"Vehicle with reg number {booking.RegNumber} does not exist");
         
-        booking.Resolve(request.ResolveBookingModel.Distance);
+        booking.Complete(request.ResolveBookingModel.Distance);
         
-        vehicle.UpdateOdometer(request.ResolveBookingModel.Distance);
-        vehicle.MakeAvailable();
+        foreach (var domainEvent in booking.DomainEvents)
+        {
+            await mediator.Publish(domainEvent);
+        }
+
+        booking.ClearDomainEvents();
     }
 }
+        

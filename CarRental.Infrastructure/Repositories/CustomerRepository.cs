@@ -1,6 +1,6 @@
-﻿using CarRental.Application.Interfaces;
-using CarRental.Domain.Entities.Customers;
+﻿using CarRental.Domain.Entities.Customers;
 using CarRental.Domain.Repositories;
+using CarRental.Infrastructure.Data;
 
 namespace CarRental.Application.Repositories
 {

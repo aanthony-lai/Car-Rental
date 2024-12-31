@@ -1,9 +1,43 @@
 ﻿@page "/"
+@inject IMediator Mediator;
+@inject VehicleStateContainer VehicleStateContainer;
+
 <PageTitle>Car rental</PageTitle>
-<Vehicles />
-<Bookings />
-<Customers />
+
+<CascadingValue Value="RefreshData">
+	<VehicleView 
+	Vehicles="_vehicles"
+	Customers="_customers" >
+	</VehicleView>
+
+	<BookingView 
+	Bookings="_bookings" >
+	</BookingView>
+
+	<Customers />
+</CascadingValue>
 
 @code {
-	
+	private List<Vehicle> _vehicles = [];
+	private List<Customer> _customers = [];
+	private List<Booking> _bookings = [];
+
+	protected override async Task OnInitializedAsync() 
+	{
+		VehicleStateContainer.StateChangedEvent += RefreshData;
+		await LoadDataAsync();
+	}
+
+	private async Task RefreshData() 
+	{
+		await LoadDataAsync();
+	}
+
+	private async Task LoadDataAsync() 
+	{
+		_vehicles = await Mediator.Send(new GetVehiclesRequest());
+		_customers = await Mediator.Send(new GetCustomersRequest());
+		_bookings = await Mediator.Send(new GetBookingsRequest());
+		StateHasChanged();
+	}
 }

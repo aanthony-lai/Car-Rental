@@ -16,7 +16,7 @@
 		</td>
 		<td>
 			<button
-				disabled="true"
+				disabled=@true
 				class="@(vechicle.Status == VehicleStatus.Available ? "btn btn-dark" : "btn btn-danger")">
 				@vechicle.Status
 			</button>
@@ -26,7 +26,7 @@
 
 @code {
 	[Parameter] 
-    public List<IVehicle> Vechicles { get; set; } = [];
+    public List<Vehicle> Vechicles { get; set; } = [];
 
 	[Parameter]
 	public List<Customer> Customers { get; set; } = [];
