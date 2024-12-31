@@ -1,11 +1,16 @@
-﻿.vechicle-container {
-    border: solid 0.5px;
+﻿.vehicleView {
+    border: solid 2px;
+    border-radius: 10px;
     width: 100%;
-    margin-bottom: 3rem;
+    padding: 1rem;
+    max-height: 40vh;
+    overflow: auto;
+    scrollbar-width: none;
+    background-color: #ffd3b6;
 }
 
-table {
-    width: 100%;
+.vehicleView__table {
+    
 }
 
 .btn .btn-outline-primary {

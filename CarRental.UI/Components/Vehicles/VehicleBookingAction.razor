@@ -10,12 +10,11 @@
 	disabled="@(RentInProgress || 
 	            string.IsNullOrWhiteSpace(_selectedSocialSecurityNumber) ||
 	            IsRented)"
-	class="btn btn-outline-primary">
-	Rent
+	class="btn btn-dark">Rent
 </button>
 
 @code {
-	private string _selectedSocialSecurityNumber;
+	private string _selectedSocialSecurityNumber = string.Empty;
 	
 	[Parameter] 
 	public bool RentInProgress { get; set; }
